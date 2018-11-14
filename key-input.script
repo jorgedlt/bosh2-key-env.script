@@ -27,11 +27,11 @@ be ()
     echo "   ${YELLOW}BOSH_DEPLOYMENT${GREEN} ${BOSH_DEPLOYMENT:-${GREY}empty}${CYAN}"
     echo "   ${YELLOW}BOSH_INSTANCEID${GREEN} ${BOSH_INSTANCEID:-${GREY}empty}${CYAN}"
     echo
-    echo ${WHITE} 'Cut & Paste Template' ${RESET}
-    echo -e ${GREY} "dcs \t or export BOSH_DATACENTER='foobar' ${RESET}"
-    echo -e ${GREY} "bes \t or export BOSH_ENVIRONMENT='foobar' ${RESET}"
-    echo -e ${GREY} "bds \t or export BOSH_DEPLOYMENT='foobar' ${RESET}"
-    echo -e ${GREY} "bis \t or export BOSH_INSTANCEID='foobar' ${RESET}"
+    echo ${WHITE} 'Use SET commands or Cut & Paste Templates' ${RESET}
+    echo -e ${BLUE} "dcs ${GREY}\t or export BOSH_DATACENTER='foobar' ${RESET}"
+    echo -e ${BLUE} "bes ${GREY}\t or export BOSH_ENVIRONMENT='foobar' ${RESET}"
+    echo -e ${BLUE} "bds ${GREY}\t or export BOSH_DEPLOYMENT='foobar' ${RESET}"
+    echo -e ${BLUE} "bis ${GREY}\t or export BOSH_INSTANCEID='foobar' ${RESET}"
     echo
 }
 
