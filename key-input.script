@@ -1,0 +1,299 @@
+set +o history
+
+# key shortcuts - bosh
+
+
+datestamp=$(date +"%Y%m%d%H%M")
+
+export BOSH_DATACENTER=$(echo dc)
+
+alias bosh2='bosh'
+
+bd ()
+{
+    echo; echo "   ${YELLOW}BOSH_ENVIRONMENT${GREEN} ${BOSH_ENVIRONMENT}${CYAN}"
+    echo ${GREEN}
+    bosh2 deployments
+    echo ${RESET}
+    echo "${GREY} 'command: bosh2 deployments' ${RESET}"
+    echo
+}
+
+# BOSH_INSTANCEID
+
+be ()
+{
+    echo
+    echo "   ${YELLOW}BOSH_DATACENTER${GREEN} ${BOSH_DATACENTER:-${GREY}empty}${CYAN}"
+    echo "   ${YELLOW}BOSH_ENVIRONMENT${GREEN} ${BOSH_ENVIRONMENT:-${GREY}empty}${CYAN}"
+    echo "   ${YELLOW}BOSH_DEPLOYMENT${GREEN} ${BOSH_DEPLOYMENT:-${GREY}empty}${CYAN}"
+    echo "   ${YELLOW}BOSH_INSTANCEID${GREEN} ${BOSH_INSTANCEID:-${GREY}empty}${CYAN}"
+    echo
+    echo ${WHITE} 'Cut & Paste Template' ${RESET}
+    echo -e ${GREY} "dcs \t or export BOSH_DATACENTER='foobar' ${RESET}"
+    echo -e ${GREY} "bes \t or export BOSH_ENVIRONMENT='foobar' ${RESET}"
+    echo -e ${GREY} "bds \t or export BOSH_DEPLOYMENT='foobar' ${RESET}"
+    echo -e ${GREY} "bis \t or export BOSH_INSTANCEID='foobar' ${RESET}"
+    echo
+}
+
+# bosh env set
+bes ()
+{
+    export BOSH_ENVIRONMENT=${1:-}
+    be
+}
+
+# bosh dev set
+bds ()
+{
+    export BOSH_DEPLOYMENT=${1:-}
+    be
+}
+
+# bosh ins set
+bis ()
+{
+    export BOSH_INSTANCEID=${1:-}
+    be
+}
+
+# bosh dc set
+bes ()
+{
+    export BOSH_DATACENTER=${1:-}
+    be
+}
+
+# bosh hints
+bh ()
+{
+  export BASE=$(echo ${GREEN})
+  export HLIT=$(echo ${WHITE})
+  export VLIT=$(echo ${BLUE})
+
+  echo ${BASE}
+  echo "   ${VLIT}BOSH_DATACENTER${GREEN} ${BOSH_DATACENTER:-${GREY}empty}${CYAN}"
+  echo "   ${VLIT}BOSH_ENVIRONMENT${GREEN} ${BOSH_ENVIRONMENT:-${GREY}empty}${CYAN}"
+  echo "   ${VLIT}BOSH_DEPLOYMENT${GREEN} ${BOSH_DEPLOYMENT:-${GREY}empty}${CYAN}"
+  echo "   ${VLIT}BOSH_INSTANCEID${GREEN} ${BOSH_INSTANCEID:-${GREY}empty}${CYAN}"
+  echo ${BASE}
+
+  echo -e "
+  MYeasy BOSH2 Hints
+  ==============================
+  bd       \t~ show deployments
+  be       \t~ show CURRENT bosh ${HLIT}${BOSH_ENVIRONMENT:-${GREY}BOSH_ENVIRONMENT}${BASE} and ${HLIT}${BOSH_DEPLOYMENT:-${GREY}BOSH_DEPLOYMENT}${BASE}
+  bh       \t~ Show THIS help page (BOSH HELPS)
+  bi       \t~ Show instances [${HLIT}${BOSH_DEPLOYMENT:-${GREY}BOSH_DEPLOYMENT}${BASE}]
+  bl       \t~ bosh LOGIN [alias]
+  bo       \t~ bosh LOGOUT
+  bv       \t~ Show vitals [${HLIT}${BOSH_DEPLOYMENT:-${GREY}BOSH_DEPLOYMENT}${BASE}]
+  ---
+  bsshh      \t~ ssh helps
+  bsshi     \t~ ssh to selected ${HLIT}${BOSH_INSTANCEID:-${GREY}BOSH_INSTANCEID}${BASE}
+  ---
+  bca       \t~ BOSH config archive
+  bcs       \t~ BOSH config archive
+
+  replicaset \t~ 1: dc 2: tenant 3: replica set name suffix
+             \t~ replicaset mia pcf-sandbox jdlt.
+
+HOWTO ADVANCE BOSH
+#
+  bosh2 -e ${HLIT}${BOSH_ENVIRONMENT:-${GREY}BOSH_ENVIRONMENT}${BASE} -d ${HLIT}${BOSH_DEPLOYMENT:-${GREY}BOSH_DEPLOYMENT}${BASE} restart
+  bosh2 -e ${HLIT}${BOSH_ENVIRONMENT:-${GREY}BOSH_ENVIRONMENT}${BASE} -d ${HLIT}${BOSH_DEPLOYMENT:-${GREY}BOSH_DEPLOYMENT}${BASE} recreate ${HLIT}${BOSH_INSTANCEID:-${GREY}BOSH_INSTANCEID} --fix
+${BASE}
+#
+  bosh2 deploy
+  bosh2 errands
+#
+  bosh2 cloud-config
+  bosh2 releases
+  bosh2 create-release --force
+  bosh2 update-release
+  bosh2 upload-release
+#
+${BASE}
+  bosh2 -e ${HLIT}${BOSH_ENVIRONMENT:-${GREY}BOSH_ENVIRONMENT}${BASE} -d ${HLIT}${BOSH_DEPLOYMENT:-${GREY}BOSH_DEPLOYMENT}${BASE} ssh mongodb 'w' | grep stdout
+  bosh2 -e ${HLIT}${BOSH_ENVIRONMENT:-${GREY}BOSH_ENVIRONMENT}${BASE} -d ${HLIT}${BOSH_DEPLOYMENT:-${GREY}BOSH_DEPLOYMENT}${BASE} ssh rs 'df -h' | grep stdout
+#
+  bosh2 instances --ps  : process health
+#
+  intro       \t~ https://ulti.quip.com/ov2mAgqv9OSF/BOSH-Intro
+"
+  echo ${RESET}
+}
+
+# need to add a bosh2 -e pcf-sandbox cloud-config
+
+
+# password hints
+ph ()
+{
+  echo -e "
+  MYeasy PASSWORD Hints
+  ==============================
+ # MIA
+    mom           \t~  safe get secret/mia/mongodb/director
+    pcf           \t~  safe get secret/mia/dev/pcf/bosh
+    ds-dev        \t~  safe get secret/mia/ds-dev/director  (StepMOM)
+    deputy        \t~  safe get secret/mia/deputy-director
+    pcf-sandbox   \t~  safe get secret/mia/pcf-sandbox/director
+
+ # ATL
+    deputy        \t~ safe get secret/atl/deputy-director
+    pcf           \t~ safe get secret/atl/prod/pcf/bosh
+    ds-prod       \t~ safe get secret/atl/ds-prod/director
+    mom           \t~ safe get secret/atl/mongodb-prod/director
+
+  " | ccze -A
+}
+
+# mongo hints
+mh ()
+{
+  echo -e "
+  MYeasy MONGO Hints
+  ==============================
+  sd       \t~ show databases
+  sc       \t~ show collections
+  mh       \t~ Show THIS help page (MONGO HELPS)
+
+  REF      \t~ https://docs.mongodb.com/manual/reference/mongo-shell/
+
+  replicaset \t~ 1: dc 2: tenant 3: replica set name suffix
+             \t~ replicaset mia pcf-sandbox jdlt.
+  " | ccze -A
+}
+
+# cssh replicaset-jdlt | grep z[1,2,3] | grep fbc | awk '{print $1}'
+                                      # where fbc is my search string
+
+# bosh show instances
+bi ()
+{
+    echo; echo "   ${YELLOW}BOSH_ENVIRONMENT${GREEN} ${BOSH_ENVIRONMENT}${CYAN}"
+
+    # replicaset=${1:-foo};
+    # r=${1};
+    DeploymentID=${1};
+
+    if [ $# -lt 1 ] ; then {
+        bosh2 instances
+        return
+    } else {
+       bosh2 instances -d ${DeploymentID}
+       return
+        }
+    fi
+
+    echo ${RESET}
+    echo "${GREY} 'command: bosh2 instances -d ${BOSH_ENVIRONMENT}' ${RESET}"
+    echo
+
+}
+
+# bosh vitals
+bv ()
+{
+    if [ $# -lt 1 ] ; then {
+        bosh2 instances --vitals
+        return
+    } else {
+       bosh2 instances -d ${1} --vitals
+       return
+        }
+    fi
+}
+
+# bosh login
+bl ()
+{
+  if [ $# -lt 1 ] ; then {
+      beep
+      echo -e "ERROR: No Environmental Alias was provided"
+      echo -e "       Please provide an alias from \n$(bs)"
+      return
+  } else {
+     my_url=$(_burl ${1})
+     #
+     export BOSH_ENVIRONMENT="${1}" ; echo BOSH_ENVIRONMENT set to ${BOSH_ENVIRONMENT}
+     bosh2 -e ${1} login
+     bosh2 alias-env ${1} -e ${my_url}
+     return
+     }
+  fi
+}
+
+# bosh logout
+bo ()
+{
+    bosh2 log-out
+}
+
+# bosh status
+bs ()
+{
+    bosh2 envs | ccze -A
+}
+
+# bosh ssh
+bsshh ()
+{
+  echo "   ${VLIT}BOSH_DATACENTER${GREEN} ${BOSH_DATACENTER:-${GREY}empty}${CYAN}"
+  echo "   ${VLIT}BOSH_ENVIRONMENT${GREEN} ${BOSH_ENVIRONMENT:-${GREY}empty}${CYAN}"
+  echo "   ${VLIT}BOSH_DEPLOYMENT${GREEN} ${BOSH_DEPLOYMENT:-${GREY}empty}${CYAN}"
+  echo "   ${VLIT}BOSH_INSTANCEID${GREEN} ${BOSH_INSTANCEID:-${GREY}empty}${CYAN}"
+
+ echo "bosh2 -e BOSH_ENVIRONMENT -d MY-DEPLOYMENT ssh VM-NAME/GUID"
+ echo "bosh2 -e ${BOSH_ENVIRONMENT} -d MY-DEPLOYMENT ssh VM-NAME/GUID"
+ echo "bosh2 -e pcf-sandbox -d sensu-staging ssh rabbitmq-server/60474ef6-31d7-4e4c-bad4-8329cf018075"
+ echo " see -c for remote exec and -c -r for table"
+ echo ${RESET}
+}
+
+# bosh ssh
+bsshi ()
+{
+  echo "   ${VLIT}BOSH_DATACENTER${GREEN} ${BOSH_DATACENTER:-${GREY}empty}${CYAN}"
+  echo "   ${VLIT}BOSH_ENVIRONMENT${GREEN} ${BOSH_ENVIRONMENT:-${GREY}empty}${CYAN}"
+  echo "   ${VLIT}BOSH_DEPLOYMENT${GREEN} ${BOSH_DEPLOYMENT:-${GREY}empty}${CYAN}"
+  echo "   ${VLIT}BOSH_INSTANCEID${GREEN} ${BOSH_INSTANCEID:-${GREY}empty}${CYAN}"
+
+ echo; echo "Would you like to SSH to this instance"
+ echo "bosh2 -e ${HLIT}${BOSH_ENVIRONMENT:-${GREY}BOSH_ENVIRONMENT}${BASE} -d ${HLIT}${BOSH_DEPLOYMENT:-${GREY}BOSH_DEPLOYMENT}${BASE} ssh ${HLIT}${BOSH_INSTANCEID:-${GREY}BOSH_INSTANCEID}"
+
+ read -n1 -r -p "Press return to continue, any key to abort..." key
+     if [ "$key" = '' ]; then
+         bosh2 -e ${BOSH_ENVIRONMENT} -d ${BOSH_DEPLOYMENT} ssh ${BOSH_DEPLOYMENT}
+     else
+         echo SSH ABORTED ${YELLOW}SSH REQUEST ABORTED${RESET}
+     fi
+
+ echo ${RESET}
+}
+
+# bosh CONFIG archive
+bca ()
+{
+    cp ~/.bosh/config ~/.bosh/config.${datestamp}
+}
+
+# bosh CONFIG status
+bcs ()
+{
+    ls -l .bosh/config
+    cat .bosh/config
+}
+
+# internal functions
+# get URL
+_burl ()
+{
+    bosh2 envs | grep pcf-sandbox | awk '{print $1}' | tr -d ' '
+}
+
+set -o history
+clear
+bh
