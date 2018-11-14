@@ -253,7 +253,7 @@ bsshi ()
 
  read -n1 -r -p "Press return to continue, any key to abort..." key
      if [ "$key" = '' ]; then
-         bosh2 -e ${BOSH_ENVIRONMENT} -d ${BOSH_DEPLOYMENT} ssh ${BOSH_DEPLOYMENT}
+         bosh2 -e ${BOSH_ENVIRONMENT} -d ${BOSH_DEPLOYMENT} ssh ${BOSH_INSTANCEID}
      else
          echo SSH ABORTED ${YELLOW}SSH REQUEST ABORTED${RESET}
      fi
