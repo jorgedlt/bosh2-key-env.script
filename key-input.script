@@ -2,16 +2,14 @@ set +o history
 
 # key shortcuts - bosh
 
-
 datestamp=$(date +"%Y%m%d%H%M")
 
-export BOSH_DATACENTER=$(echo dc)
-
-alias bosh2='bosh'
+export BOSH_DATACENTER=$(echo ${dc})
+#alias bosh2='bosh'
 
 bd ()
 {
-    echo; echo "   ${YELLOW}BOSH_ENVIRONMENT${GREEN} ${BOSH_ENVIRONMENT}${CYAN}"
+    echo; echo "${YELLOW}BOSH_ENVIRONMENT${GREEN} ${BOSH_ENVIRONMENT}${CYAN}"
     echo ${GREEN}
     bosh2 deployments
     echo ${RESET}
@@ -58,12 +56,12 @@ bis ()
     be
 }
 
-# bosh dc set
-bes ()
-{
-    export BOSH_DATACENTER=${1:-}
-    be
-}
+# # bosh dc set
+# dcs ()
+# {
+#     export BOSH_DATACENTER=${1:-}
+#     be
+# }
 
 # bosh hints
 bh ()
@@ -80,15 +78,16 @@ bh ()
   echo ${BASE}
 
   echo -e "
-  MYeasy BOSH2 Hints
+  ${BASE}
+  MyEasy BOSH2 Hints
   ==============================
   bd       \t~ show deployments
   be       \t~ show CURRENT bosh ${HLIT}${BOSH_ENVIRONMENT:-${GREY}BOSH_ENVIRONMENT}${BASE} and ${HLIT}${BOSH_DEPLOYMENT:-${GREY}BOSH_DEPLOYMENT}${BASE}
-  bh       \t~ Show THIS help page (BOSH HELPS)
-  bi       \t~ Show instances [${HLIT}${BOSH_DEPLOYMENT:-${GREY}BOSH_DEPLOYMENT}${BASE}]
+  bh       \t~ Show THIS help page
+  bi       \t~ Show instances [ ${HLIT}${BOSH_DEPLOYMENT:-${GREY}BOSH_DEPLOYMENT}${BASE} ]
   bl       \t~ bosh LOGIN [alias]
   bo       \t~ bosh LOGOUT
-  bv       \t~ Show vitals [${HLIT}${BOSH_DEPLOYMENT:-${GREY}BOSH_DEPLOYMENT}${BASE}]
+  bv       \t~ Show vitals [ ${HLIT}${BOSH_DEPLOYMENT:-${GREY}BOSH_DEPLOYMENT}${BASE} ]
   ---
   bsshh      \t~ ssh helps
   bsshi     \t~ ssh to selected ${HLIT}${BOSH_INSTANCEID:-${GREY}BOSH_INSTANCEID}${BASE}
@@ -100,7 +99,6 @@ bh ()
              \t~ replicaset mia pcf-sandbox jdlt.
 
 HOWTO ADVANCE BOSH
-#
   bosh2 -e ${HLIT}${BOSH_ENVIRONMENT:-${GREY}BOSH_ENVIRONMENT}${BASE} -d ${HLIT}${BOSH_DEPLOYMENT:-${GREY}BOSH_DEPLOYMENT}${BASE} restart
   bosh2 -e ${HLIT}${BOSH_ENVIRONMENT:-${GREY}BOSH_ENVIRONMENT}${BASE} -d ${HLIT}${BOSH_DEPLOYMENT:-${GREY}BOSH_DEPLOYMENT}${BASE} recreate ${HLIT}${BOSH_INSTANCEID:-${GREY}BOSH_INSTANCEID} --fix
 ${BASE}
@@ -122,11 +120,8 @@ ${BASE}
 #
   intro       \t~ https://ulti.quip.com/ov2mAgqv9OSF/BOSH-Intro
 "
-  echo ${RESET}
+echo ${RESET}
 }
-
-# need to add a bosh2 -e pcf-sandbox cloud-config
-
 
 # password hints
 ph ()
@@ -167,13 +162,11 @@ mh ()
   " | ccze -A
 }
 
-# cssh replicaset-jdlt | grep z[1,2,3] | grep fbc | awk '{print $1}'
-                                      # where fbc is my search string
 
 # bosh show instances
 bi ()
 {
-    echo; echo "   ${YELLOW}BOSH_ENVIRONMENT${GREEN} ${BOSH_ENVIRONMENT}${CYAN}"
+    echo; echo "${YELLOW}BOSH_ENVIRONMENT${GREEN} ${BOSH_ENVIRONMENT}${CYAN}"
 
     # replicaset=${1:-foo};
     # r=${1};
@@ -188,7 +181,7 @@ bi ()
         }
     fi
 
-    echo ${RESET}
+    echo "${RESET}"
     echo "${GREY} 'command: bosh2 instances -d ${BOSH_ENVIRONMENT}' ${RESET}"
     echo
 
@@ -213,7 +206,7 @@ bl ()
   if [ $# -lt 1 ] ; then {
       beep
       echo -e "ERROR: No Environmental Alias was provided"
-      echo -e "       Please provide an alias from \n$(bs)"
+      echo -e "       Please provide an alias from \n$(_bs)"
       return
   } else {
      my_url=$(_burl ${1})
@@ -230,12 +223,6 @@ bl ()
 bo ()
 {
     bosh2 log-out
-}
-
-# bosh status
-bs ()
-{
-    bosh2 envs | ccze -A
 }
 
 # bosh ssh
@@ -287,11 +274,17 @@ bcs ()
     cat .bosh/config
 }
 
+# bosh status
+_bs ()
+{
+    bosh2 envs
+}
+
 # internal functions
 # get URL
 _burl ()
 {
-    bosh2 envs | grep pcf-sandbox | awk '{print $1}' | tr -d ' '
+    bosh2 envs | grep pcf-sandbox | awk '{print $1}' | tr -d ' ' | head -1
 }
 
 set -o history
