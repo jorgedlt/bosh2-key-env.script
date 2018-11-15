@@ -1,11 +1,9 @@
 set +o history
 
 # key shortcuts - bosh
-
 datestamp=$(date +"%Y%m%d%H%M")
 
 export BOSH_DATACENTER=$(echo ${dc})
-#alias bosh2='bosh'
 
 bd ()
 {
@@ -16,8 +14,6 @@ bd ()
     echo "${GREY} 'command: bosh2 deployments' ${RESET}"
     echo
 }
-
-# BOSH_INSTANCEID
 
 be ()
 {
@@ -56,12 +52,12 @@ bis ()
     be
 }
 
-# # bosh dc set
-# dcs ()
-# {
-#     export BOSH_DATACENTER=${1:-}
-#     be
-# }
+# bosh dc set
+dcs ()
+{
+     export BOSH_DATACENTER=${1:-}
+     be
+ }
 
 # bosh hints
 bh ()
@@ -75,7 +71,6 @@ bh ()
   echo "   ${VLIT}BOSH_ENVIRONMENT${GREEN} ${BOSH_ENVIRONMENT:-${GREY}empty}${CYAN}"
   echo "   ${VLIT}BOSH_DEPLOYMENT${GREEN} ${BOSH_DEPLOYMENT:-${GREY}empty}${CYAN}"
   echo "   ${VLIT}BOSH_INSTANCEID${GREEN} ${BOSH_INSTANCEID:-${GREY}empty}${CYAN}"
-  echo ${BASE}
 
   echo -e "
   ${BASE}
@@ -142,7 +137,7 @@ ph ()
     ds-prod       \t~ safe get secret/atl/ds-prod/director
     mom           \t~ safe get secret/atl/mongodb-prod/director
 
-  " | ccze -A
+  "  
 }
 
 # mongo hints
