@@ -200,8 +200,9 @@ bl ()
 {
   if [ $# -lt 1 ] ; then {
       beep
-      echo -e "ERROR: No Environmental Alias was provided"
-      echo -e "       Please provide an alias from \n$(_bs)"
+      echo -e "${YELLOW}WARN: No Environmental Alias was provided"
+      echo -e "      Please provide an alias from the following list: \n${WHITE}$( _bs )"
+      echo -e "${RESET}"
       return
   } else {
      my_url=$(_burl ${1})
@@ -272,14 +273,16 @@ bcs ()
 # bosh status
 _bs ()
 {
-    bosh2 envs
+    bosh2 envs | sort | uniq
 }
 
 # internal functions
 # get URL
 _burl ()
-{
-    bosh2 envs | grep pcf-sandbox | awk '{print $1}' | tr -d ' ' | head -1
+{  
+     echo ${GREEN}
+    bosh2 envs | grep pcf-sandbox | awk '{print $1}' | tr -d ' ' | sort | uniq | head -1
+    echo ${RESET}
 }
 
 set -o history
