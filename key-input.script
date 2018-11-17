@@ -15,6 +15,17 @@ bd ()
     echo
 }
 
+_be ()
+{
+    echo
+    echo "   ${YELLOW}BOSH_DATACENTER${GREEN} ${BOSH_DATACENTER:-${GREY}empty}${CYAN}"
+    echo "   ${YELLOW}BOSH_ENVIRONMENT${GREEN} ${BOSH_ENVIRONMENT:-${GREY}empty}${CYAN}"
+    echo "   ${YELLOW}BOSH_DEPLOYMENT${GREEN} ${BOSH_DEPLOYMENT:-${GREY}empty}${CYAN}"
+    echo "   ${YELLOW}BOSH_INSTANCEID${GREEN} ${BOSH_INSTANCEID:-${GREY}empty}${CYAN}"
+    echo ${RESET}
+    echo
+}
+
 be ()
 {
     echo
@@ -28,6 +39,18 @@ be ()
     echo -e ${BLUE} "bes ${GREY}\t or export BOSH_ENVIRONMENT='foobar' ${RESET}"
     echo -e ${BLUE} "bds ${GREY}\t or export BOSH_DEPLOYMENT='foobar' ${RESET}"
     echo -e ${BLUE} "bis ${GREY}\t or export BOSH_INSTANCEID='foobar' ${RESET}"
+    echo
+}
+
+bdl ()
+{
+    echo ${YELLOW}"BOSH Deployments List"${RESET}
+    echo ${CYAN}
+    bd | cut -c1-27 | tr -d 'A-Z' \
+      | tr '\012' ' ' | tr -s ' ' | tr ' ' '\012' \
+      | grep -v ^$ | grep -v command \
+      | grep -E 'command|\-' | grep -x '.\{8,27\}'
+    echo ${RESET}
     echo
 }
 
@@ -89,6 +112,7 @@ bh ()
   ---
   bca       \t~ BOSH config archive
   bcs       \t~ BOSH config archive
+  bdl       \t~ BOSH deployment list BETA
 
   replicaset \t~ 1: dc 2: tenant 3: replica set name suffix
              \t~ replicaset mia pcf-sandbox jdlt.
@@ -121,23 +145,32 @@ echo ${RESET}
 # password hints
 ph ()
 {
-  echo -e "
-  MYeasy PASSWORD Hints
-  ==============================
- # MIA
+echo -e "
+MyEasy BOSH Password Hints
+==============================
+# MIA
     mom           \t~  safe get secret/mia/mongodb/director
     pcf           \t~  safe get secret/mia/dev/pcf/bosh
     ds-dev        \t~  safe get secret/mia/ds-dev/director  (StepMOM)
     deputy        \t~  safe get secret/mia/deputy-director
     pcf-sandbox   \t~  safe get secret/mia/pcf-sandbox/director
 
- # ATL
+# ATL
     deputy        \t~ safe get secret/atl/deputy-director
     pcf           \t~ safe get secret/atl/prod/pcf/bosh
     ds-prod       \t~ safe get secret/atl/ds-prod/director
     mom           \t~ safe get secret/atl/mongodb-prod/director
 
-  "  
+# PHX
+    deputy        \t~ safe get secret/phx/deputy-director
+    pcf           \t~ safe get secret/phx/prod/pcf/bosh
+    ds-prod       \t~ safe get secret/phx/ds-prod/director
+
+# TOR
+    deputy        \t~ safe get secret/tor/deputy-director
+    pcf           \t~ safe get secret/tor/prod/pcf/bosh
+    ds-prod       \t~ safe get secret/tor/ds-prod/director
+"  
 }
 
 # mongo hints
@@ -209,7 +242,10 @@ bl ()
      #
      export BOSH_ENVIRONMENT="${1}" ; echo BOSH_ENVIRONMENT set to ${BOSH_ENVIRONMENT}
      bosh2 -e ${1} login
-     bosh2 alias-env ${1} -e ${my_url}
+     #bosh2 alias-env ${1} -e ${my_url}
+
+     [ $? -ne 0 ] && ph || _be
+     
      return
      }
   fi
