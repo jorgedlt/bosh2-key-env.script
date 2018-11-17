@@ -46,7 +46,7 @@ bdl ()
 {
     echo ${YELLOW}"BOSH Deployments List"${RESET}
     echo ${CYAN}
-    bd | cut -c1-27 | tr -d 'A-Z' \
+    bd | cut -c1-20 | tr -d 'A-Z' \
       | tr '\012' ' ' | tr -s ' ' | tr ' ' '\012' \
       | grep -v ^$ | grep -v command \
       | grep -E 'command|\-' | grep -x '.\{8,27\}'
