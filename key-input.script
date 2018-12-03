@@ -7,51 +7,44 @@ export BOSH_DATACENTER=$(echo ${dc})
 
 bd ()
 {
-    echo; echo "${YELLOW}BOSH_ENVIRONMENT${GREEN} ${BOSH_ENVIRONMENT}${CYAN}"
+    echo; printf "${YELLOW}BOSH_ENVIRONMENT${GREEN} ${BOSH_ENVIRONMENT}${CYAN}"
     echo ${GREEN}
     bosh2 deployments
-    echo ${RESET}
-    echo "${GREY} 'command: bosh2 deployments' ${RESET}"
+    printf ${RESET}
+    printf "${GREY} command: bosh2 deployments ${RESET}"
     echo
 }
 
 _be ()
 {
-    echo
-    echo "   ${YELLOW}BOSH_DATACENTER${GREEN} ${BOSH_DATACENTER:-${GREY}empty}${CYAN}"
-    echo "   ${YELLOW}BOSH_ENVIRONMENT${GREEN} ${BOSH_ENVIRONMENT:-${GREY}empty}${CYAN}"
-    echo "   ${YELLOW}BOSH_DEPLOYMENT${GREEN} ${BOSH_DEPLOYMENT:-${GREY}empty}${CYAN}"
-    echo "   ${YELLOW}BOSH_INSTANCEID${GREEN} ${BOSH_INSTANCEID:-${GREY}empty}${CYAN}"
-    echo ${RESET}
+echo
+    printf "   ${YELLOW}BOSH_DATACENTER${GREEN} ${BOSH_DATACENTER:-${GREY}empty}${CYAN}"
+    printf "   ${YELLOW}BOSH_ENVIRONMENT${GREEN} ${BOSH_ENVIRONMENT:-${GREY}empty}${CYAN}"
+    printf "   ${YELLOW}BOSH_DEPLOYMENT${GREEN} ${BOSH_DEPLOYMENT:-${GREY}empty}${CYAN}"
+    printf "   ${YELLOW}BOSH_INSTANCEID${GREEN} ${BOSH_INSTANCEID:-${GREY}empty}${CYAN}"
+    printf ${RESET}
     echo
 }
 
 be ()
 {
-    echo
-    echo "   ${YELLOW}BOSH_DATACENTER${GREEN} ${BOSH_DATACENTER:-${GREY}empty}${CYAN}"
-    echo "   ${YELLOW}BOSH_ENVIRONMENT${GREEN} ${BOSH_ENVIRONMENT:-${GREY}empty}${CYAN}"
-    echo "   ${YELLOW}BOSH_DEPLOYMENT${GREEN} ${BOSH_DEPLOYMENT:-${GREY}empty}${CYAN}"
-    echo "   ${YELLOW}BOSH_INSTANCEID${GREEN} ${BOSH_INSTANCEID:-${GREY}empty}${CYAN}"
-    echo
-    echo ${WHITE} 'Use SET commands or Cut & Paste Templates' ${RESET}
-    echo -e ${BLUE} "dcs ${GREY}\t or export BOSH_DATACENTER='foobar' ${RESET}"
-    echo -e ${BLUE} "bes ${GREY}\t or export BOSH_ENVIRONMENT='foobar' ${RESET}"
-    echo -e ${BLUE} "bds ${GREY}\t or export BOSH_DEPLOYMENT='foobar' ${RESET}"
-    echo -e ${BLUE} "bis ${GREY}\t or export BOSH_INSTANCEID='foobar' ${RESET}"
+echo
+    printf "   ${YELLOW}BOSH_DATACENTER${GREEN} ${BOSH_DATACENTER:-${GREY}empty}${CYAN}"
+    printf "   ${YELLOW}BOSH_ENVIRONMENT${GREEN} ${BOSH_ENVIRONMENT:-${GREY}empty}${CYAN}"
+    printf "   ${YELLOW}BOSH_DEPLOYMENT${GREEN} ${BOSH_DEPLOYMENT:-${GREY}empty}${CYAN}"
+    printf "   ${YELLOW}BOSH_INSTANCEID${GREEN} ${BOSH_INSTANCEID:-${GREY}empty}${CYAN}"
     echo
 }
 
 bdl ()
 {
-    echo ${YELLOW}"BOSH Deployments List"${RESET}
+    printf "${YELLOW}BOSH Deployments List${RESET}"
     echo ${CYAN}
     bd | cut -c1-20 | tr -d 'A-Z' \
       | tr '\012' ' ' | tr -s ' ' | tr ' ' '\012' \
       | grep -v ^$ | grep -v command \
       | grep -E 'command|\-' | grep -x '.\{8,27\}'
-    echo ${RESET}
-    echo
+    echo ${RESET}; echo ''
 }
 
 # bosh env set
@@ -89,13 +82,13 @@ bh ()
   export HLIT=$(echo ${WHITE})
   export VLIT=$(echo ${BLUE})
 
-  /bin/echo ${BASE}
-  echo "   ${VLIT}BOSH_DATACENTER${GREEN} ${BOSH_DATACENTER:-${GREY}empty}${CYAN}"
-  echo "   ${VLIT}BOSH_ENVIRONMENT${GREEN} ${BOSH_ENVIRONMENT:-${GREY}empty}${CYAN}"
-  echo "   ${VLIT}BOSH_DEPLOYMENT${GREEN} ${BOSH_DEPLOYMENT:-${GREY}empty}${CYAN}"
-  echo "   ${VLIT}BOSH_INSTANCEID${GREEN} ${BOSH_INSTANCEID:-${GREY}empty}${CYAN}"
+printf ${BASE}
+  printf "   ${VLIT}BOSH_DATACENTER${GREEN} ${BOSH_DATACENTER:-${GREY}empty}${CYAN}"
+  printf "   ${VLIT}BOSH_ENVIRONMENT${GREEN} ${BOSH_ENVIRONMENT:-${GREY}empty}${CYAN}"
+  printf "   ${VLIT}BOSH_DEPLOYMENT${GREEN} ${BOSH_DEPLOYMENT:-${GREY}empty}${CYAN}"
+  printf "   ${VLIT}BOSH_INSTANCEID${GREEN} ${BOSH_INSTANCEID:-${GREY}empty}${CYAN}"
 
-  /bin/echo -e "
+printf "
   ${BASE}
   MyEasy BOSH2 Hints
   ==============================
@@ -107,8 +100,9 @@ bh ()
   bo       \t~ bosh LOGOUT
   bv       \t~ Show vitals [ ${HLIT}${BOSH_DEPLOYMENT:-${GREY}BOSH_DEPLOYMENT}${BASE} ]
   ---
-  bsshh      \t~ ssh helps
-  bsshi     \t~ ssh to selected ${HLIT}${BOSH_INSTANCEID:-${GREY}BOSH_INSTANCEID}${BASE}
+  bsshh     \t~ ssh helps
+  bsshi     \t~ ssh to selected ${HLIT}${BOSH_INSTANCEID:-${GREY}BOSH_INSTANCEID}
+  ${BASE}
   ---
   bca       \t~ BOSH config archive
   bcs       \t~ BOSH config archive
@@ -139,13 +133,13 @@ ${BASE}
 #
   intro       \t~ https://ulti.quip.com/ov2mAgqv9OSF/BOSH-Intro
 "
-echo ${RESET}
+printf ${RESET}
 }
 
 # password hints
 ph ()
 {
- /bin/echo -e "
+printf "
 MyEasy BOSH Password Hints
 ==============================
 # MIA
@@ -170,13 +164,13 @@ MyEasy BOSH Password Hints
     deputy        \t~ safe get secret/tor/deputy-director
     pcf           \t~ safe get secret/tor/prod/pcf/bosh
     ds-prod       \t~ safe get secret/tor/ds-prod/director
-"  
+"
 }
 
 # mongo hints
 mh ()
 {
-   /bin/echo -e "
+printf "
   MYeasy MONGO Hints
   ==============================
   sd       \t~ show databases
@@ -187,7 +181,7 @@ mh ()
 
   replicaset \t~ 1: dc 2: tenant 3: replica set name suffix
              \t~ replicaset mia pcf-sandbox jdlt.
-  " | ccze -A
+"
 }
 
 
@@ -209,8 +203,8 @@ bi ()
         }
     fi
 
-    echo "${RESET}"
-    echo "${GREY} 'command: bosh2 instances -d ${BOSH_ENVIRONMENT}' ${RESET}"
+    printf "${RESET}"
+    printf "${GREY} 'command: bosh2 instances -d ${BOSH_ENVIRONMENT}' ${RESET}"
     echo
 
 }
@@ -233,19 +227,19 @@ bl ()
 {
   if [ $# -lt 1 ] ; then {
       beep
-      echo -e "${YELLOW}WARN: No Environmental Alias was provided"
-      echo -e "      Please provide an alias from the following list: \n${WHITE}$( _bs )"
-      echo -e "${RESET}"
+      printf "${YELLOW}WARN: No Environmental Alias was provided"
+      printf "      Please provide an alias from the following list: \n${WHITE}$( _bs )"
+      printf "${RESET}"
+      echo
       return
   } else {
      my_url=$(_burl ${1})
      #
-     export BOSH_ENVIRONMENT="${1}" ; echo BOSH_ENVIRONMENT set to ${BOSH_ENVIRONMENT}
+     export "BOSH_ENVIRONMENT=${1}"
+     printf "BOSH_ENVIRONMENT set to ${BOSH_ENVIRONMENT}"
      bosh2 -e ${1} login
-     #bosh2 alias-env ${1} -e ${my_url}
-
-     [ $? -ne 0 ] && ph || _be
-     
+     [ $? -ne 0 ] && { ph ; } || { _be ; }
+     echo
      return
      }
   fi
@@ -260,37 +254,37 @@ bo ()
 # bosh ssh
 bsshh ()
 {
-  echo "   ${VLIT}BOSH_DATACENTER${GREEN} ${BOSH_DATACENTER:-${GREY}empty}${CYAN}"
-  echo "   ${VLIT}BOSH_ENVIRONMENT${GREEN} ${BOSH_ENVIRONMENT:-${GREY}empty}${CYAN}"
-  echo "   ${VLIT}BOSH_DEPLOYMENT${GREEN} ${BOSH_DEPLOYMENT:-${GREY}empty}${CYAN}"
-  echo "   ${VLIT}BOSH_INSTANCEID${GREEN} ${BOSH_INSTANCEID:-${GREY}empty}${CYAN}"
+  printf "   ${VLIT}BOSH_DATACENTER${GREEN} ${BOSH_DATACENTER:-${GREY}empty}${CYAN}"
+  printf "   ${VLIT}BOSH_ENVIRONMENT${GREEN} ${BOSH_ENVIRONMENT:-${GREY}empty}${CYAN}"
+  printf "   ${VLIT}BOSH_DEPLOYMENT${GREEN} ${BOSH_DEPLOYMENT:-${GREY}empty}${CYAN}"
+  printf "   ${VLIT}BOSH_INSTANCEID${GREEN} ${BOSH_INSTANCEID:-${GREY}empty}${CYAN}"
 
- echo "bosh2 -e BOSH_ENVIRONMENT -d MY-DEPLOYMENT ssh VM-NAME/GUID"
- echo "bosh2 -e ${BOSH_ENVIRONMENT} -d MY-DEPLOYMENT ssh VM-NAME/GUID"
- echo "bosh2 -e pcf-sandbox -d sensu-staging ssh rabbitmq-server/60474ef6-31d7-4e4c-bad4-8329cf018075"
- echo " see -c for remote exec and -c -r for table"
- echo ${RESET}
+  printf "bosh2 -e BOSH_ENVIRONMENT -d MY-DEPLOYMENT ssh VM-NAME/GUID"
+  printf "bosh2 -e ${BOSH_ENVIRONMENT} -d MY-DEPLOYMENT ssh VM-NAME/GUID"
+  printf "bosh2 -e pcf-sandbox -d sensu-staging ssh rabbitmq-server/60474ef6-31d7-4e4c-bad4-8329cf018075"
+  printf " see -c for remote exec and -c -r for table"
+  printf ${RESET}
 }
 
 # bosh ssh
 bsshi ()
 {
-  echo "   ${VLIT}BOSH_DATACENTER${GREEN} ${BOSH_DATACENTER:-${GREY}empty}${CYAN}"
-  echo "   ${VLIT}BOSH_ENVIRONMENT${GREEN} ${BOSH_ENVIRONMENT:-${GREY}empty}${CYAN}"
-  echo "   ${VLIT}BOSH_DEPLOYMENT${GREEN} ${BOSH_DEPLOYMENT:-${GREY}empty}${CYAN}"
-  echo "   ${VLIT}BOSH_INSTANCEID${GREEN} ${BOSH_INSTANCEID:-${GREY}empty}${CYAN}"
+  printf "   ${VLIT}BOSH_DATACENTER${GREEN} ${BOSH_DATACENTER:-${GREY}empty}${CYAN}"
+  printf "   ${VLIT}BOSH_ENVIRONMENT${GREEN} ${BOSH_ENVIRONMENT:-${GREY}empty}${CYAN}"
+  printf "   ${VLIT}BOSH_DEPLOYMENT${GREEN} ${BOSH_DEPLOYMENT:-${GREY}empty}${CYAN}"
+  printf "   ${VLIT}BOSH_INSTANCEID${GREEN} ${BOSH_INSTANCEID:-${GREY}empty}${CYAN}"
 
- echo; echo "Would you like to SSH to this instance"
- echo "bosh2 -e ${HLIT}${BOSH_ENVIRONMENT:-${GREY}BOSH_ENVIRONMENT}${BASE} -d ${HLIT}${BOSH_DEPLOYMENT:-${GREY}BOSH_DEPLOYMENT}${BASE} ssh ${HLIT}${BOSH_INSTANCEID:-${GREY}BOSH_INSTANCEID}"
+ echo; printf "Would you like to SSH to this instance"
+ printf "bosh2 -e ${HLIT}${BOSH_ENVIRONMENT:-${GREY}BOSH_ENVIRONMENT}${BASE} -d ${HLIT}${BOSH_DEPLOYMENT:-${GREY}BOSH_DEPLOYMENT}${BASE} ssh ${HLIT}${BOSH_INSTANCEID:-${GREY}BOSH_INSTANCEID}"
 
  read -n1 -r -p "Press return to continue, any key to abort..." key
      if [ "$key" = '' ]; then
          bosh2 -e ${BOSH_ENVIRONMENT} -d ${BOSH_DEPLOYMENT} ssh ${BOSH_INSTANCEID}
      else
-         echo SSH ABORTED ${YELLOW}SSH REQUEST ABORTED${RESET}
+         echo "SSH ABORTED ${YELLOW}SSH REQUEST ABORTED${RESET}"
      fi
 
- echo ${RESET}
+ printf ${RESET}
 }
 
 # bosh CONFIG archive
@@ -315,8 +309,8 @@ _bs ()
 # internal functions
 # get URL
 _burl ()
-{  
-     echo ${GREEN}
+{
+    echo ${GREEN}
     bosh2 envs | grep pcf-sandbox | awk '{print $1}' | tr -d ' ' | sort | uniq | head -1
     echo ${RESET}
 }
