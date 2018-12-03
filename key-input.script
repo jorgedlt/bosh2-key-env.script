@@ -89,13 +89,13 @@ bh ()
   export HLIT=$(echo ${WHITE})
   export VLIT=$(echo ${BLUE})
 
-  echo ${BASE}
+  /bin/echo ${BASE}
   echo "   ${VLIT}BOSH_DATACENTER${GREEN} ${BOSH_DATACENTER:-${GREY}empty}${CYAN}"
   echo "   ${VLIT}BOSH_ENVIRONMENT${GREEN} ${BOSH_ENVIRONMENT:-${GREY}empty}${CYAN}"
   echo "   ${VLIT}BOSH_DEPLOYMENT${GREEN} ${BOSH_DEPLOYMENT:-${GREY}empty}${CYAN}"
   echo "   ${VLIT}BOSH_INSTANCEID${GREEN} ${BOSH_INSTANCEID:-${GREY}empty}${CYAN}"
 
-  echo -e "
+  /bin/echo -e "
   ${BASE}
   MyEasy BOSH2 Hints
   ==============================
@@ -145,7 +145,7 @@ echo ${RESET}
 # password hints
 ph ()
 {
-echo -e "
+ /bin/echo -e "
 MyEasy BOSH Password Hints
 ==============================
 # MIA
@@ -176,7 +176,7 @@ MyEasy BOSH Password Hints
 # mongo hints
 mh ()
 {
-  echo -e "
+   /bin/echo -e "
   MYeasy MONGO Hints
   ==============================
   sd       \t~ show databases
