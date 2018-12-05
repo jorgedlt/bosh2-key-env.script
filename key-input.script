@@ -100,13 +100,18 @@ printf "
   bo       \t~ bosh LOGOUT
   bv       \t~ Show vitals [ ${HLIT}${BOSH_DEPLOYMENT:-${GREY}BOSH_DEPLOYMENT}${BASE} ]
   ---
-  bsshh     \t~ ssh helps
   bsshi     \t~ ssh to selected ${HLIT}${BOSH_INSTANCEID:-${GREY}BOSH_INSTANCEID}
   ${BASE}
   ---
   bca       \t~ BOSH config archive
   bcs       \t~ BOSH config archive
   bdl       \t~ BOSH deployment list BETA
+
+  ---
+  bes       \t~ set BOSH_ENVIRONMENT
+  bds       \t~ set BOSH_DEPLOYMENT
+  bis       \t~ set BOSH_INSTANCEID
+  dcs       \t~ set BOSH_DATACENTER
 
   replicaset \t~ 1: dc 2: tenant 3: replica set name suffix
              \t~ replicaset mia pcf-sandbox jdlt.
@@ -252,27 +257,12 @@ bo ()
 }
 
 # bosh ssh
-bsshh ()
-{
-  printf "   ${VLIT}BOSH_DATACENTER${GREEN} ${BOSH_DATACENTER:-${GREY}empty}${CYAN}"
-  printf "   ${VLIT}BOSH_ENVIRONMENT${GREEN} ${BOSH_ENVIRONMENT:-${GREY}empty}${CYAN}"
-  printf "   ${VLIT}BOSH_DEPLOYMENT${GREEN} ${BOSH_DEPLOYMENT:-${GREY}empty}${CYAN}"
-  printf "   ${VLIT}BOSH_INSTANCEID${GREEN} ${BOSH_INSTANCEID:-${GREY}empty}${CYAN}"
-
-  printf "bosh2 -e BOSH_ENVIRONMENT -d MY-DEPLOYMENT ssh VM-NAME/GUID"
-  printf "bosh2 -e ${BOSH_ENVIRONMENT} -d MY-DEPLOYMENT ssh VM-NAME/GUID"
-  printf "bosh2 -e pcf-sandbox -d sensu-staging ssh rabbitmq-server/60474ef6-31d7-4e4c-bad4-8329cf018075"
-  printf " see -c for remote exec and -c -r for table"
-  printf ${RESET}
-}
-
-# bosh ssh
 bsshi ()
 {
-  printf "   ${VLIT}BOSH_DATACENTER${GREEN} ${BOSH_DATACENTER:-${GREY}empty}${CYAN}"
-  printf "   ${VLIT}BOSH_ENVIRONMENT${GREEN} ${BOSH_ENVIRONMENT:-${GREY}empty}${CYAN}"
-  printf "   ${VLIT}BOSH_DEPLOYMENT${GREEN} ${BOSH_DEPLOYMENT:-${GREY}empty}${CYAN}"
-  printf "   ${VLIT}BOSH_INSTANCEID${GREEN} ${BOSH_INSTANCEID:-${GREY}empty}${CYAN}"
+  printf "%s\n" "   ${VLIT}BOSH_DATACENTER${GREEN} ${BOSH_DATACENTER:-${GREY}empty}${CYAN}"
+  printf "%s\n" "   ${VLIT}BOSH_ENVIRONMENT${GREEN} ${BOSH_ENVIRONMENT:-${GREY}empty}${CYAN}"
+  printf "%s\n" "   ${VLIT}BOSH_DEPLOYMENT${GREEN} ${BOSH_DEPLOYMENT:-${GREY}empty}${CYAN}"
+  printf "%s\n" "   ${VLIT}BOSH_INSTANCEID${GREEN} ${BOSH_INSTANCEID:-${GREY}empty}${CYAN}"
 
  echo; printf "Would you like to SSH to this instance"
  printf "bosh2 -e ${HLIT}${BOSH_ENVIRONMENT:-${GREY}BOSH_ENVIRONMENT}${BASE} -d ${HLIT}${BOSH_DEPLOYMENT:-${GREY}BOSH_DEPLOYMENT}${BASE} ssh ${HLIT}${BOSH_INSTANCEID:-${GREY}BOSH_INSTANCEID}"
