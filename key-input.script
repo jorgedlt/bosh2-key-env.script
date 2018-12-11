@@ -264,9 +264,10 @@ bsshi ()
   printf "%s\n" "   ${VLIT}BOSH_DEPLOYMENT${GREEN} ${BOSH_DEPLOYMENT:-${GREY}empty}${CYAN}"
   printf "%s\n" "   ${VLIT}BOSH_INSTANCEID${GREEN} ${BOSH_INSTANCEID:-${GREY}empty}${CYAN}"
 
- echo; printf "Would you like to SSH to this instance"
- printf "bosh2 -e ${HLIT}${BOSH_ENVIRONMENT:-${GREY}BOSH_ENVIRONMENT}${BASE} -d ${HLIT}${BOSH_DEPLOYMENT:-${GREY}BOSH_DEPLOYMENT}${BASE} ssh ${HLIT}${BOSH_INSTANCEID:-${GREY}BOSH_INSTANCEID}"
+ echo; printf "%s\n" "Would you like to SSH to this instance"
+ printf "       bosh2 -e ${HLIT}${BOSH_ENVIRONMENT:-${GREY}BOSH_ENVIRONMENT}${BASE} -d ${HLIT}${BOSH_DEPLOYMENT:-${GREY}BOSH_DEPLOYMENT}${BASE} ssh ${HLIT}${BOSH_INSTANCEID:-${GREY}BOSH_INSTANCEID}"
 
+echo; echo
  read -n1 -r -p "Press return to continue, any key to abort..." key
      if [ "$key" = '' ]; then
          bosh2 -e ${BOSH_ENVIRONMENT} -d ${BOSH_DEPLOYMENT} ssh ${BOSH_INSTANCEID}
